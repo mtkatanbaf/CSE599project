@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xd:acceleratorMap xmlns:xd="http://www.xilinx.com/xidane" xd:functionName="vta" xd:componentRef="vta" xd:initiationInterval="x" xd:clockPeriod="7.000000" xd:sequential="true" xd:hostMachine="64" xd:reset="control">
+  <xd:controlReg xd:name="control" xd:interfaceRef="s_axi_CONTROL_BUS" xd:busTypeRef="axilite" xd:type="generic_axi_lite" xd:offset="0x0"/>
+  <xd:arg xd:name="*(insns)" xd:originalName="insns" xd:direction="inout" xd:interfaceRef="m_axi_ins_port" xd:busTypeRef="aximm" xd:dataWidth="64" xd:bufferDirection="in"/>
+  <xd:arg xd:name="*(uops)" xd:originalName="uops" xd:direction="inout" xd:interfaceRef="m_axi_uop_port" xd:busTypeRef="aximm" xd:dataWidth="32" xd:bufferDirection="in"/>
+  <xd:arg xd:name="*(inputs)" xd:originalName="inputs" xd:direction="inout" xd:interfaceRef="m_axi_narrow_port" xd:busTypeRef="aximm" xd:dataPack="true" xd:bitMapping="127:0" xd:dataWidth="128" xd:bufferDirection="in"/>
+  <xd:arg xd:name="*(weights)" xd:originalName="weights" xd:direction="inout" xd:interfaceRef="m_axi_narrow_port" xd:busTypeRef="aximm" xd:dataPack="true" xd:bitMapping="127:0" xd:dataWidth="128" xd:bufferDirection="in"/>
+  <xd:arg xd:name="*(biases)" xd:originalName="biases" xd:direction="inout" xd:interfaceRef="m_axi_wide_port" xd:busTypeRef="aximm" xd:dataPack="true" xd:bitMapping="511:0" xd:dataWidth="512" xd:bufferDirection="in"/>
+  <xd:arg xd:name="*(outputs)" xd:originalName="outputs" xd:direction="inout" xd:interfaceRef="m_axi_wide_port" xd:busTypeRef="aximm" xd:dataPack="true" xd:bitMapping="511:0" xd:dataWidth="512" xd:bufferDirection="out"/>
+  <xd:arg xd:name="insn_count" xd:originalName="insn_count" xd:direction="in" xd:interfaceRef="s_axi_CONTROL_BUS" xd:busTypeRef="axilite" xd:offset="0x10" xd:handshakeRef="ap_none" xd:dataWidth="32"/>
+  <xd:arg xd:name="insns" xd:originalName="insns" xd:direction="in" xd:interfaceRef="s_axi_CONTROL_BUS" xd:busTypeRef="axilite" xd:aximmInterfaceRef="m_axi_ins_port" xd:dataWidth="32" xd:offset="0x18" xd:handshakeRef="ap_none"/>
+  <xd:arg xd:name="uops" xd:originalName="uops" xd:direction="in" xd:interfaceRef="s_axi_CONTROL_BUS" xd:busTypeRef="axilite" xd:aximmInterfaceRef="m_axi_uop_port" xd:dataWidth="32" xd:offset="0x20" xd:handshakeRef="ap_none"/>
+  <xd:arg xd:name="inputs_V" xd:originalName="inputs_V" xd:direction="in" xd:interfaceRef="s_axi_CONTROL_BUS" xd:busTypeRef="axilite" xd:aximmInterfaceRef="m_axi_narrow_port" xd:dataWidth="32" xd:offset="0x28" xd:handshakeRef="ap_none"/>
+  <xd:arg xd:name="weights_V" xd:originalName="weights_V" xd:direction="in" xd:interfaceRef="s_axi_CONTROL_BUS" xd:busTypeRef="axilite" xd:aximmInterfaceRef="m_axi_narrow_port" xd:dataWidth="32" xd:offset="0x30" xd:handshakeRef="ap_none"/>
+  <xd:arg xd:name="biases_V" xd:originalName="biases_V" xd:direction="in" xd:interfaceRef="s_axi_CONTROL_BUS" xd:busTypeRef="axilite" xd:aximmInterfaceRef="m_axi_wide_port" xd:dataWidth="32" xd:offset="0x38" xd:handshakeRef="ap_none"/>
+  <xd:arg xd:name="outputs_V" xd:originalName="outputs_V" xd:direction="in" xd:interfaceRef="s_axi_CONTROL_BUS" xd:busTypeRef="axilite" xd:aximmInterfaceRef="m_axi_wide_port" xd:dataWidth="32" xd:offset="0x40" xd:handshakeRef="ap_none"/>
+  <xd:latencyEstimates xd:best-case="undef" xd:worst-case="undef" xd:average-case="undef"/>
+  <xd:resourceEstimates xd:LUT="20597" xd:FF="32161" xd:BRAM="216" xd:DSP="144"/>
+</xd:acceleratorMap>

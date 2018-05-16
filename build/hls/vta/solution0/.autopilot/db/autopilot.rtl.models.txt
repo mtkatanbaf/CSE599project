@@ -1,0 +1,14 @@
+vta_mul_8s_8s_16_3
+vta_mac_muladd_8sbkb
+vta_mac_muladd_8scud
+vta_mac_muladd_8sdEe
+vta_uop_mem
+vta_inp_mem_0_V
+vta_wgt_mem_0_V
+vta_acc_mem_0_V
+vta_CONTROL_BUS_s_axi
+vta_ins_port_m_axi
+vta_uop_port_m_axi
+vta_narrow_port_m_axi
+vta_wide_port_m_axi
+vta

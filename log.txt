@@ -1,0 +1,24 @@
+Changes I made:
+    1. in hw_spec.h change the width of inputs, weights and acc
+    2. in vta.cc change the multiplication to xnor
+    3. in test_lib.cc change multiplication to xnor in fc_test and conv2d_test
+    
+Questions:
+    1. current vta structure (with uops) clearly does not support heterogenous.  Do we want to continue using uops?
+    2. In more details, how do we want to change the structure? we should specially consider heterogenous load, heterogenous multiply. One option, the bitstream contains
+    the full network! another option, after reset the network store all the weights in SRAMs, the inputs are stream in. loop for computation. wat is the maximum network
+    that can be hard coded or store in SRAM?
+    3. if we want to implement xnor-net on top of vta, what are the basic buiding blocks?
+    
+New project plan:
+I want to implement bitwise operations. the hardware is dumb, it has no idea that the weights/activations are broken into bits. 
+So the shift/add operations will be handled using microOps.
+
+I have made following changes:
+    width of inputs, weights changed to 1.
+    A new opcode is added called VTA_OPCODE_BGEMM. It is similar to GEMM, except it has a number of shift field in the opcode.
+    an statement is added in vta.cc to handle VTA_OPCODE_BGEMM.
+    A test is added in vta_test.cc to verify BGEMM core.
+    A test similar to fc_test is added to test_lib.cc to check the bit-wise matrix multiply core.
+    The allocInit2dArray function fill the arrays with zero. (because of the negative shift I believe) I created a similar function allocInitBool2dArray
+    The data that unpacks in BGEMM core is different from the data that stores in input/weight arrays. There should be a problem in packing/unpacking.

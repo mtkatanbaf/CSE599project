@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2017.1 (64-bit)
+# SW Build 1846317 on Fri Apr 14 18:54:47 MDT 2017
+# IP Build 1846188 on Fri Apr 14 20:52:08 MDT 2017
+# Start of session at: Mon Apr 23 12:21:54 2018
+# Process ID: 4476
+# Current directory: /home/mohamad/Documents/CSE599/lab1/build/vivado/vta.runs/synth_1
+# Command line: vivado -log vta_wrapper.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source vta_wrapper.tcl
+# Log file: /home/mohamad/Documents/CSE599/lab1/build/vivado/vta.runs/synth_1/vta_wrapper.vds
+# Journal file: /home/mohamad/Documents/CSE599/lab1/build/vivado/vta.runs/synth_1/vivado.jou
+#-----------------------------------------------------------
+source vta_wrapper.tcl -notrace

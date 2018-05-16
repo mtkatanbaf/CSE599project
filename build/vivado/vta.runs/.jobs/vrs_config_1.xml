@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<Runs Version="1" Minor="0">
+	<Run Id="vta_xlconcat_1_0_synth_1" LaunchDir="/home/mohamad/Documents/CSE599/lab1/build/vivado/vta.runs/vta_xlconcat_1_0_synth_1" FlowId="Vivado_Synthesis" FromStepId="vivado" ToStepId="vivado"/>
+	<Run Id="vta_xbar_0_synth_1" LaunchDir="/home/mohamad/Documents/CSE599/lab1/build/vivado/vta.runs/vta_xbar_0_synth_1" FlowId="Vivado_Synthesis" FromStepId="vivado" ToStepId="vivado"/>
+	<Run Id="vta_processing_system7_1_0_synth_1" LaunchDir="/home/mohamad/Documents/CSE599/lab1/build/vivado/vta.runs/vta_processing_system7_1_0_synth_1" FlowId="Vivado_Synthesis" FromStepId="vivado" ToStepId="vivado"/>
+	<Run Id="vta_proc_sys_reset_0_synth_1" LaunchDir="/home/mohamad/Documents/CSE599/lab1/build/vivado/vta.runs/vta_proc_sys_reset_0_synth_1" FlowId="Vivado_Synthesis" FromStepId="vivado" ToStepId="vivado"/>
+	<Run Id="vta_auto_pc_0_synth_1" LaunchDir="/home/mohamad/Documents/CSE599/lab1/build/vivado/vta.runs/vta_auto_pc_0_synth_1" FlowId="Vivado_Synthesis" FromStepId="vivado" ToStepId="vivado"/>
+	<Run Id="vta_axi_timer_1_0_synth_1" LaunchDir="/home/mohamad/Documents/CSE599/lab1/build/vivado/vta.runs/vta_axi_timer_1_0_synth_1" FlowId="Vivado_Synthesis" FromStepId="vivado" ToStepId="vivado"/>
+	<Run Id="vta_vta_0_0_synth_1" LaunchDir="/home/mohamad/Documents/CSE599/lab1/build/vivado/vta.runs/vta_vta_0_0_synth_1" FlowId="Vivado_Synthesis" FromStepId="vivado" ToStepId="vivado"/>
+	<Run Id="vta_axi_smc_0_synth_1" LaunchDir="/home/mohamad/Documents/CSE599/lab1/build/vivado/vta.runs/vta_axi_smc_0_synth_1" FlowId="Vivado_Synthesis" FromStepId="vivado" ToStepId="vivado"/>
+	<Run Id="synth_1" LaunchDir="/home/mohamad/Documents/CSE599/lab1/build/vivado/vta.runs/synth_1" FlowId="Vivado_Synthesis" FromStepId="vivado" ToStepId="vivado">
+		<Parent Id="vta_xlconcat_1_0_synth_1"/>
+		<Parent Id="vta_xbar_0_synth_1"/>
+		<Parent Id="vta_processing_system7_1_0_synth_1"/>
+		<Parent Id="vta_proc_sys_reset_0_synth_1"/>
+		<Parent Id="vta_auto_pc_0_synth_1"/>
+		<Parent Id="vta_axi_timer_1_0_synth_1"/>
+		<Parent Id="vta_vta_0_0_synth_1"/>
+		<Parent Id="vta_axi_smc_0_synth_1"/>
+	</Run>
+	<Run Id="impl_1" LaunchDir="/home/mohamad/Documents/CSE599/lab1/build/vivado/vta.runs/impl_1" FlowId="Vivado_Implementation" FromStepId="init_design" ToStepId="write_bitstream">
+		<Parent Id="synth_1"/>
+		<Parent Id="vta_xlconcat_1_0_synth_1"/>
+		<Parent Id="vta_xbar_0_synth_1"/>
+		<Parent Id="vta_processing_system7_1_0_synth_1"/>
+		<Parent Id="vta_proc_sys_reset_0_synth_1"/>
+		<Parent Id="vta_auto_pc_0_synth_1"/>
+		<Parent Id="vta_axi_timer_1_0_synth_1"/>
+		<Parent Id="vta_vta_0_0_synth_1"/>
+		<Parent Id="vta_axi_smc_0_synth_1"/>
+	</Run>
+</Runs>
+

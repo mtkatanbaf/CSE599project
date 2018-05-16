@@ -1,0 +1,95 @@
+<AutoPilot:ProjectResources xmlns:AutoPilot="com.autoesl.autopilot.ui.directiveView">
+<sourceFile name="">
+<directive functionLabel="" functionName="vta" label="">
+<pragma name="INTERFACE">
+<option name="s_axilite" positionalBoolean="mode" value=""/>
+<option name="port" positionalBoolean="4" value="insn_count"/>
+<option name="bundle" value="CONTROL_BUS"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="vta" label="">
+<pragma name="INTERFACE">
+<option name="m_axi" positionalBoolean="mode" value=""/>
+<option name="port" positionalBoolean="4" value="insns"/>
+<option name="offset" value="slave"/>
+<option name="bundle" value="ins_port"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="vta" label="">
+<pragma name="INTERFACE">
+<option name="m_axi" positionalBoolean="mode" value=""/>
+<option name="port" positionalBoolean="4" value="uops"/>
+<option name="offset" value="slave"/>
+<option name="bundle" value="uop_port"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="vta" label="">
+<pragma name="INTERFACE">
+<option name="m_axi" positionalBoolean="mode" value=""/>
+<option name="port" positionalBoolean="4" value="inputs"/>
+<option name="offset" value="slave"/>
+<option name="bundle" value="narrow_port"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="vta" label="">
+<pragma name="INTERFACE">
+<option name="m_axi" positionalBoolean="mode" value=""/>
+<option name="port" positionalBoolean="4" value="weights"/>
+<option name="offset" value="slave"/>
+<option name="bundle" value="narrow_port"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="vta" label="">
+<pragma name="INTERFACE">
+<option name="m_axi" positionalBoolean="mode" value=""/>
+<option name="port" positionalBoolean="4" value="biases"/>
+<option name="offset" value="slave"/>
+<option name="bundle" value="wide_port"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="vta" label="">
+<pragma name="INTERFACE">
+<option name="m_axi" positionalBoolean="mode" value=""/>
+<option name="port" positionalBoolean="4" value="outputs"/>
+<option name="offset" value="slave"/>
+<option name="bundle" value="wide_port"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="vta" label="">
+<pragma name="INTERFACE">
+<option name="s_axilite" positionalBoolean="mode" value=""/>
+<option name="port" positionalBoolean="4" value="return"/>
+<option name="bundle" value="CONTROL_BUS"/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="vta" label="">
+<pragma name="ARRAY_PARTITION">
+<option name="variable" positionalBoolean="4" value="inp_mem"/>
+<option name="factor" value="64"/>
+<option name="dim" value="2"/>
+<option name="partition" positionalBoolean="3" value=""/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="vta" label="">
+<pragma name="ARRAY_PARTITION">
+<option name="variable" positionalBoolean="4" value="wgt_mem"/>
+<option name="factor" value="64"/>
+<option name="dim" value="2"/>
+<option name="partition" positionalBoolean="3" value=""/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="vta" label="">
+<pragma name="ARRAY_PARTITION">
+<option name="variable" positionalBoolean="4" value="acc_mem"/>
+<option name="factor" value="64"/>
+<option name="dim" value="2"/>
+<option name="partition" positionalBoolean="3" value=""/>
+</pragma>
+</directive>
+<directive functionLabel="" functionName="vta" label="">
+<pragma name="PIPELINE">
+<option name="II" value="1"/>
+</pragma>
+</directive>
+</sourceFile>
+</AutoPilot:ProjectResources>

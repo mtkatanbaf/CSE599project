@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2017.1 (64-bit)
+# SW Build 1846317 on Fri Apr 14 18:54:47 MDT 2017
+# IP Build 1846188 on Fri Apr 14 20:52:08 MDT 2017
+# Start of session at: Mon Apr 23 11:56:18 2018
+# Process ID: 2723
+# Current directory: /home/mohamad/Documents/CSE599/lab1/build/vivado
+# Command line: vivado -mode tcl -source /home/mohamad/Documents/CSE599/lab1/scripts/vivado.tcl
+# Log file: /home/mohamad/Documents/CSE599/lab1/build/vivado/vivado.log
+# Journal file: /home/mohamad/Documents/CSE599/lab1/build/vivado/vivado.jou
+#-----------------------------------------------------------
+source /home/mohamad/Documents/CSE599/lab1/scripts/vivado.tcl
