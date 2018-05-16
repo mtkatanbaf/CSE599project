@@ -20,13 +20,13 @@ int main(void) {
     // Run load/store test
     int status = mem_test(128, 128);
     // Run reset test
-    status |= reset_test(128, 128);
+    //status |= reset_test(128, 128);
     // Run fully connected layer test
-    status |= fc_test(64, 128, 128);
+    //status |= fc_test(64, 128, 128);
 
     // Run 2D convolution layer test
     // TODO Part 2: Uncomment line below
-    status |= conv2d_test(1, 9, 9, 3, 3, 32, 64);
+    //status |= conv2d_test(1, 9, 9, 3, 3, 32, 64);
 
     // Run boolean layer test
     status |= boolean_test(1, 16, 16);

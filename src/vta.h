@@ -14,10 +14,10 @@
 #include "./hw_spec.h"
 
 /* \typedef inp_T Input datatype*/
-typedef ap_int<VTA_INP_WIDTH> inp_T;
+typedef ap_uint<VTA_INP_WIDTH> inp_T;
 
 /* \typedef wgt_T Weight datatype*/
-typedef ap_int<VTA_WGT_WIDTH> wgt_T;
+typedef ap_uint<VTA_WGT_WIDTH> wgt_T;
 
 /* \typedef acc_T Accumulator datatype*/
 typedef ap_int<VTA_ACC_WIDTH> acc_T;
@@ -48,6 +48,9 @@ typedef ap_uint<VTA_LOG_WGT_BUFF_DEPTH+1> wgt_idx_T;
 
 /* \typedef acc_idx_T Accumulator SRAM index datatype*/
 typedef ap_uint<VTA_LOG_ACC_BUFF_DEPTH+1> acc_idx_T;
+
+/* \typedef sft_val_T Shifter value datatype*/
+typedef ap_uint<VTA_LOG_SFT_LEN> sft_val_T;
 
 /* \typedef opcode_T Opcode datatype*/
 typedef ap_uint<VTA_OPCODE_BIT_WIDTH> opcode_T;

@@ -73,9 +73,6 @@ void pack2dBuffer(T *dst, T **src, int y_size, int x_size, int y_block, int x_bl
             for (int m = 0; m < 8 / T_WIDTH; m++) {
               dst[buffer_idx] |= (src[i * y_block + k][j * x_block + l + m] &
                 ((1ULL << T_WIDTH) - 1)) << (m * T_WIDTH);
-              /*dst[l+m] = (src[i * y_block + k][j * x_block + l + m] );
-              printf("DEBUG - i= %d, j=%d, data=%d \n",i * y_block + k, j * x_block + l + m,
-               static_cast<int>(dst[l+m]));*/
             }
             buffer_idx++;
           }
@@ -87,6 +84,29 @@ void pack2dBuffer(T *dst, T **src, int y_size, int x_size, int y_block, int x_bl
       }
     }
   }
+}
+
+template <typename T, int T_WIDTH>
+void pack2dBoolBuffer(uint8_t *dst, T **src, int y_size, int x_size, int y_block, int x_block) {
+  int buffer_idx = 0;
+  for (int i = 0; i < y_size / y_block; i++) {
+    for (int j = 0; j < x_size / x_block; j++) {
+      for (int k = 0; k < y_block; k++) {
+        for (int l = 0; l < x_block; l += 8 / T_WIDTH) {
+            dst[buffer_idx] = 0;
+            for (int m = 0; m < 8 / T_WIDTH; m++) {
+              dst[buffer_idx] |= (src[i * y_block + k][j * x_block + l + m] &
+                ((1ULL << T_WIDTH) - 1)) << (m * T_WIDTH);
+            }
+            buffer_idx++;
+          }
+      }
+    }
+  }
+  /*for (int i =0; i<(y_size*x_size)/8; i++){
+    printf("DEBUG - i= %d, data=%d \n", i,
+               static_cast<uint8_t>(dst[i]));
+  }*/
 }
 
 template <typename T, int T_WIDTH>
@@ -198,11 +218,9 @@ T ** allocInitBool2dArray(int rows, int cols) {
   for (int i = 0; i < rows; i++) {
     array[i] = static_cast<T *>(malloc(sizeof(T) * cols));
   }
-  #if VTA_DEBUG == 0
-        printf("DEBUG - rows= %d, cols= %d: \n",
-               static_cast<int>(rows),
-               static_cast<int>(cols));
-  #endif  // VTA_DEBUG
+  /*printf("DEBUG - rows= %d, cols= %d: \n",
+          static_cast<int>(rows),
+          static_cast<int>(cols));*/
   // Init
   for (int i = 0; i < rows; i++) {
     for (int j = 0; j < cols; j++) {
@@ -1174,12 +1192,12 @@ int boolean_test(int batch, int in_channels, int out_channels) {
   int wgt_size = in_channels / VTA_BLOCK_IN * out_channels / VTA_BLOCK_OUT;
   int out_size = batch / VTA_BATCH * out_channels / VTA_BLOCK_OUT;
   // Make sure we don't exceed buffer bounds
-#if VTA_DEBUG == 1
+//#if VTA_DEBUG == 1
   printf("INFO - uop size = %d/%d\n", uop_size, VTA_UOP_BUFF_DEPTH);
   printf("INFO - input size = %d/%d\n", inp_size, VTA_INP_BUFF_DEPTH);
   printf("INFO - weight size = %d/%d\n", wgt_size, VTA_WGT_BUFF_DEPTH);
   printf("INFO - out size = %d/%d\n", out_size, VTA_ACC_BUFF_DEPTH);
-#endif
+//#endif
   assert(uop_size <= VTA_UOP_BUFF_DEPTH);
   assert(inp_size <= VTA_INP_BUFF_DEPTH);
   assert(wgt_size <= VTA_WGT_BUFF_DEPTH);
@@ -1226,10 +1244,10 @@ int boolean_test(int batch, int in_channels, int out_channels) {
       acc_T sum = biases[i][j];
       for (int k = 0; k < in_channels; k++) {
         sum += (acc_T) (inputs[i][k] & weights[j][k]);
-        printf("DEBUG - %d, %d, %d, elem= %d, weight=%d, temp=%d: \n",i,j,k, 
+        /*printf("DEBUG - %d, %d, %d, elem= %d, weight=%d, temp=%d: \n",i,j,k, 
                 static_cast<uint>(inputs[i][k]), 
                 static_cast<uint>(weights[j][k]), 
-                static_cast<uint>(sum));
+                static_cast<uint>(sum));*/
       }
       // Set
       outputs_ref[i][j] = (acc_T) sum;
@@ -1237,16 +1255,16 @@ int boolean_test(int batch, int in_channels, int out_channels) {
   }
 
   // Prepare the input buffer
-  inp_T *input_buf = static_cast<inp_T *>(allocBuffer(VTA_INP_ELEM_BYTES * inp_size));
-  pack2dBuffer<inp_T, VTA_INP_WIDTH>(input_buf,
+  uint8_t *input_buf = static_cast<uint8_t *>(allocBuffer(VTA_INP_ELEM_BYTES * inp_size));
+  pack2dBoolBuffer<inp_T, VTA_INP_WIDTH>(input_buf,
                                      inputs,
                                      batch,
                                      in_channels,
                                      VTA_BATCH,
                                      VTA_BLOCK_IN);
   // Prepare the weight buffer
-  wgt_T *weight_buf = static_cast<wgt_T *>(allocBuffer(VTA_WGT_ELEM_BYTES * wgt_size));
-  pack2dBuffer<wgt_T, VTA_WGT_WIDTH>(weight_buf,
+  uint8_t *weight_buf = static_cast<uint8_t *>(allocBuffer(VTA_WGT_ELEM_BYTES * wgt_size));
+  pack2dBoolBuffer<wgt_T, VTA_WGT_WIDTH>(weight_buf,
                                      weights,
                                      out_channels,
                                      in_channels,
