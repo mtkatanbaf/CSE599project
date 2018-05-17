@@ -58,9 +58,9 @@ void vta(
           memcpy(&inp_mem[sram_base][0],
                  (const inp_vec_T*) &inputs[dram_base * VTA_BATCH],
                  size * sizeof(inp_vec_T) * VTA_BATCH);
-          /*printf("DEBUG - size= %d, %d, %d \n", static_cast<uint>(size), sizeof(inp_vec_T), VTA_BATCH);
-          for (int i = 0; i < size * sizeof(inp_vec_T) * VTA_BATCH / sizeof(inp_vec_T); ++i){
-              printf("DEBUG - i= %d, data= %d \n",i,
+          //printf("DEBUG - size= %d, %d, %d \n", static_cast<uint>(size), sizeof(inp_vec_T), VTA_BATCH);
+          /*for (int i = 0; i < size * sizeof(inp_vec_T) * VTA_BATCH / sizeof(inp_vec_T); ++i){
+              printf("DEBUG - i= %d, data= 0x%x \n",i,
                 static_cast<uint16_t>(inp_mem[sram_base][i]));
             for (int k = 0; k < sizeof(inp_vec_T) * 8; ++k){
               printf("DEBUG - k= %d, bit= %d \n", k, 
@@ -71,6 +71,10 @@ void vta(
           memcpy(&wgt_mem[sram_base][0],
                  (const wgt_vec_T*) &weights[dram_base * VTA_BLOCK_OUT],
                  size * sizeof(wgt_vec_T) * VTA_BLOCK_OUT);
+          /*for (int i = 0; i < size * sizeof(wgt_vec_T) * VTA_BLOCK_OUT / sizeof(wgt_vec_T); ++i){
+              printf("DEBUG - i= %d, dweight= 0x%x \n",i,
+                static_cast<uint16_t>(wgt_mem[sram_base][i]));
+          }*/
         } else if (memory_type == VTA_MEM_ID_ACC) {
           memcpy(&acc_mem[sram_base][0],
                  (const acc_vec_T*) &biases[dram_base * VTA_BATCH],
@@ -137,7 +141,11 @@ void vta(
         inp_idx_T in_idx = uop_insn.bgemm.src_idx;
         wgt_idx_T wt_idx = uop_insn.bgemm.wgt_idx;
         acc_idx_T ac_idx = uop_insn.bgemm.dst_idx;
-        sft_val_T st_val = uop_insn.bgemm.sft_val;   
+        /*printf("DEBUG - in_idx= %d, wt_idx=%d, ac_idx=%d: \n",
+                static_cast<uint>(in_idx), 
+                static_cast<uint>(wt_idx), 
+                static_cast<uint>(ac_idx));*/
+        //sft_val_T st_val = uop_insn.bgemm.sft_val;   
         if (reset_acc){
           for (int i = 0; i < VTA_BATCH ; ++i){
             acc_mem[ac_idx][i] = 0;
@@ -157,8 +165,12 @@ void vta(
               for (int k=0; k < VTA_BLOCK_IN; ++k){
                 inp_T elem = inp_mem[in_idx][i].range((k+1) * VTA_INP_WIDTH - 1, k * VTA_INP_WIDTH);
                 wgt_T weight = wgt_mem[wt_idx][j].range((k+1) * VTA_WGT_WIDTH - 1, k * VTA_WGT_WIDTH);
-                temp = temp + (elem & weight) << st_val;     
+                temp = temp + (elem & weight) ;//<< st_val;     
                 //temp = temp + ((inp_T)inp_mem[in_idx][i].range((k+1) * VTA_INP_WIDTH - 1, k * VTA_INP_WIDTH)) * ((wgt_T)wgt_mem[wt_idx][j].range((k+1) * VTA_WGT_WIDTH - 1, k * VTA_WGT_WIDTH));
+                /*printf("DEBUG - %d, %d, %d, elem= %d, weight=%d, temp=%d: \n",i,j,k, 
+                static_cast<uint>(elem), 
+                static_cast<uint>(weight), 
+                static_cast<uint>(temp));*/
               }
               acc_mem[ac_idx][i].range((j+1) * VTA_ACC_WIDTH - 1, j * VTA_ACC_WIDTH) = temp;
             }

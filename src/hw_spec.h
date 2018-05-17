@@ -28,11 +28,11 @@ extern "C" {
 /*! log2 of on-chip micro-op buffer size in B */
 #define VTA_LOG_UOP_BUFF_SIZE 14
 /*! log2 of on-chip input buffer size in B */
-#define VTA_LOG_INP_BUFF_SIZE 15
+#define VTA_LOG_INP_BUFF_SIZE 12 //15
 /*! log2 of on-chip weigth buffer size in B */
-#define VTA_LOG_WGT_BUFF_SIZE 18
+#define VTA_LOG_WGT_BUFF_SIZE 15 //18
 /*! log2 of on-chip accum buffer size in B */
-#define VTA_LOG_ACC_BUFF_SIZE 17
+#define VTA_LOG_ACC_BUFF_SIZE 14 //17
 /*! log2 of max shift after boolean operation */
 #define VTA_LOG_SFT_LEN 3
 /*! log2 of instruction data type width */
@@ -208,7 +208,7 @@ typedef struct {
   /*! \brief Weight index (indexes weight buffer) */
   uint32_t wgt_idx    : VTA_LOG_WGT_BUFF_DEPTH;
   /*! \brief Shift value */
-  uint32_t sft_val    : VTA_LOG_SFT_LEN;
+  //uint32_t sft_val    : VTA_LOG_SFT_LEN;
 } VTABGemUop;
 
 

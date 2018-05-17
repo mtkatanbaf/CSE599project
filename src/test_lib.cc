@@ -104,7 +104,7 @@ void pack2dBoolBuffer(uint8_t *dst, T **src, int y_size, int x_size, int y_block
     }
   }
   /*for (int i =0; i<(y_size*x_size)/8; i++){
-    printf("DEBUG - i= %d, data=%d \n", i,
+    printf("DEBUG - i= %d, data=0x%x \n", i,
                static_cast<uint8_t>(dst[i]));
   }*/
 }
@@ -397,10 +397,10 @@ VTAGenericUop * getGEMMUops(int batch, int in_feat, int out_feat) {
 #endif
   // Generate micro ops
   int uop_idx = 0;
-  //for (int i = 0; i < batch; i++) {
+  for (int i = 0; i < batch; i++) {
     for (int j = 0; j < in_feat; j++) {
       for (int k = 0; k < out_feat; k++) {
-		for (int i = 0; i < batch; i++) {
+		//for (int i = 0; i < batch; i++) {
         converter.gemm.dst_idx = i * out_feat + k;
         converter.gemm.src_idx = i * in_feat + j;
         converter.gemm.wgt_idx = k * in_feat + j;
@@ -465,16 +465,24 @@ VTAGenericUop * getBGEMMUops(int batch, int in_feat, int out_feat) {
 #else
   VTAGenericUop *uop_buf = static_cast<VTAGenericUop *>(malloc(sizeof(VTAGenericUop) * uop_size));
 #endif
+/*printf("DEBUG - batch= %d, in_feat=%d, out_feat=%d: \n",
+                static_cast<uint>(batch), 
+                static_cast<uint>(in_feat), 
+                static_cast<uint>(out_feat));*/
   // Generate micro ops
   int uop_idx = 0;
-  //for (int i = 0; i < batch; i++) {
+  for (int i = 0; i < batch; i++) {
     for (int j = 0; j < in_feat; j++) {
       for (int k = 0; k < out_feat; k++) {
-		for (int i = 0; i < batch; i++) {
-        converter.gemm.dst_idx = i * out_feat + k;
-        converter.gemm.src_idx = i * in_feat + j;
-        converter.gemm.wgt_idx = k * in_feat + j;
+		    //for (int i = 0; i < batch; i++) {
+        converter.bgemm.dst_idx = i * out_feat + k;
+        converter.bgemm.src_idx = i * in_feat + j;
+        converter.bgemm.wgt_idx = k * in_feat + j;
         uop_buf[uop_idx++] = converter.generic;
+        /*printf("DEBUG - in_idx= %d, wt_idx=%d, ac_idx=%d: \n",
+                static_cast<uint>(converter.gemm.src_idx), 
+                static_cast<uint>(converter.gemm.wgt_idx), 
+                static_cast<uint>(converter.gemm.dst_idx));*/
       }
     }
   }
@@ -1325,6 +1333,11 @@ int boolean_test(int batch, int in_channels, int out_channels) {
                static_cast<int>(outputs_ref[i][j]),
                static_cast<int>(outputs[i][j]));
 #endif  // VTA_DEBUG
+      }
+      else{
+        /*printf("DEBUG - %d, %d, got %d as expected, the bias was %d\n", i, j,
+               static_cast<int8_t>(outputs_ref[i][j]),
+               static_cast<int8_t>(biases[i][j]));*/
       }
     }
   }

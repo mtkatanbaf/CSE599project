@@ -29,6 +29,6 @@ int main(void) {
     //status |= conv2d_test(1, 9, 9, 3, 3, 32, 64);
 
     // Run boolean layer test
-    status |= boolean_test(1, 16, 16);
+    status |= boolean_test(64, 128, 128);
     return status;
 }
