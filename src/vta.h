@@ -14,6 +14,9 @@
 #include "./hw_spec.h"
 
 /* \typedef inp_T Input datatype*/
+typedef ap_uint<1> bool_T;
+
+/* \typedef inp_T Input datatype*/
 typedef ap_uint<VTA_INP_WIDTH> inp_T;
 
 /* \typedef wgt_T Weight datatype*/
@@ -29,7 +32,8 @@ typedef ap_int<VTA_WGT_WIDTH+VTA_INP_WIDTH+1> mul_T;
 typedef ap_int<VTA_WGT_WIDTH+VTA_INP_WIDTH+VTA_LOG_BLOCK_IN+1> sum_T;
 
 /* \typedef inp_vec_T Input vector datatype*/
-typedef ap_uint<VTA_INP_WIDTH*VTA_BLOCK_IN> inp_vec_T;
+//typedef ap_uint<VTA_INP_WIDTH*VTA_BLOCK_IN> inp_vec_T;
+typedef ap_uint<1*VTA_BLOCK_IN> inp_vec_T;
 
 /* \typedef wgt_vec_T Weight vector datatype*/
 typedef ap_uint<VTA_WGT_WIDTH*VTA_BLOCK_IN> wgt_vec_T;

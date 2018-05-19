@@ -89,17 +89,26 @@ void pack2dBuffer(T *dst, T **src, int y_size, int x_size, int y_block, int x_bl
 template <typename T, int T_WIDTH>
 void pack2dBoolBuffer(uint8_t *dst, T **src, int y_size, int x_size, int y_block, int x_block) {
   int buffer_idx = 0;
-  for (int i = 0; i < y_size / y_block; i++) {
-    for (int j = 0; j < x_size / x_block; j++) {
-      for (int k = 0; k < y_block; k++) {
-        for (int l = 0; l < x_block; l += 8 / T_WIDTH) {
+  for (int h = 0; h < T_WIDTH; h++){
+    for (int i = 0; i < y_size / y_block; i++) {
+      for (int j = 0; j < x_size / x_block; j++) {
+        for (int k = 0; k < y_block; k++) {
+          /*for (int l = 0; l < x_block; l += 8 / T_WIDTH) {
             dst[buffer_idx] = 0;
-            for (int m = 0; m < 8 / T_WIDTH; m++) {
+            for (int m = 0; m < 8 / T_WIDTH ; m++) {
               dst[buffer_idx] |= (src[i * y_block + k][j * x_block + l + m] &
                 ((1ULL << T_WIDTH) - 1)) << (m * T_WIDTH);
             }
+          }*/
+          for (int l = 0; l < x_block; l += 8) {
+            dst[buffer_idx] = 0;
+            for (int m = 0; m < 8 ; m++) {
+              dst[buffer_idx] |= (((src[i * y_block + k][j * x_block + l + m]) >> h) &
+                1ULL) << m;
+            }
             buffer_idx++;
           }
+        }
       }
     }
   }
@@ -225,7 +234,7 @@ T ** allocInitBool2dArray(int rows, int cols) {
   for (int i = 0; i < rows; i++) {
     for (int j = 0; j < cols; j++) {
       array[i][j] =
-          static_cast<T>(rand_r(&globalSeed) % 2);
+          static_cast<T>(rand_r(&globalSeed) /*% 2*/);
     }
   }
   return array;
@@ -458,7 +467,7 @@ VTAGenericUop * getBGEMMUops(int batch, int in_feat, int out_feat) {
   // Converter
   union VTAUop converter;
   // Derive the total uop size
-  int uop_size = batch * in_feat * out_feat;
+  int uop_size = batch * in_feat * out_feat * VTA_INP_WIDTH;
   // Allocate buffer
 #ifdef NO_SIM
   VTAGenericUop *uop_buf = static_cast<VTAGenericUop *>(cma_alloc(sizeof(VTAGenericUop) * uop_size, CACHED));
@@ -471,18 +480,21 @@ VTAGenericUop * getBGEMMUops(int batch, int in_feat, int out_feat) {
                 static_cast<uint>(out_feat));*/
   // Generate micro ops
   int uop_idx = 0;
-  for (int i = 0; i < batch; i++) {
-    for (int j = 0; j < in_feat; j++) {
-      for (int k = 0; k < out_feat; k++) {
-		    //for (int i = 0; i < batch; i++) {
-        converter.bgemm.dst_idx = i * out_feat + k;
-        converter.bgemm.src_idx = i * in_feat + j;
-        converter.bgemm.wgt_idx = k * in_feat + j;
-        uop_buf[uop_idx++] = converter.generic;
-        /*printf("DEBUG - in_idx= %d, wt_idx=%d, ac_idx=%d: \n",
-                static_cast<uint>(converter.gemm.src_idx), 
-                static_cast<uint>(converter.gemm.wgt_idx), 
-                static_cast<uint>(converter.gemm.dst_idx));*/
+  for (int h = 0; h < VTA_INP_WIDTH; h++){
+    for (int i = 0; i < batch; i++) {
+      for (int j = 0; j < in_feat; j++) {
+        for (int k = 0; k < out_feat; k++) {
+          //for (int i = 0; i < batch; i++) {
+          converter.bgemm.dst_idx = i * out_feat + k;
+          converter.bgemm.src_idx = ((h * batch + i) * in_feat + j);
+          converter.bgemm.wgt_idx = k * in_feat + j;
+          converter.bgemm.sft_val = h;
+          uop_buf[uop_idx++] = converter.generic;
+          /*printf("DEBUG - in_idx= %d, wt_idx=%d, ac_idx=%d: \n",
+                  static_cast<uint>(converter.gemm.src_idx), 
+                  static_cast<uint>(converter.gemm.wgt_idx), 
+                  static_cast<uint>(converter.gemm.dst_idx));*/
+        }
       }
     }
   }
@@ -1195,8 +1207,8 @@ int boolean_test(int batch, int in_channels, int out_channels) {
 
   // Derive number of elements that need to be loaded/stored
   int ins_size = 6;
-  int uop_size = batch / VTA_BATCH * in_channels / VTA_BLOCK_IN * out_channels / VTA_BLOCK_OUT;
-  int inp_size = batch / VTA_BATCH * in_channels / VTA_BLOCK_IN;
+  int uop_size = VTA_INP_WIDTH * batch / VTA_BATCH * in_channels / VTA_BLOCK_IN * out_channels / VTA_BLOCK_OUT;
+  int inp_size = VTA_INP_WIDTH * batch / VTA_BATCH * in_channels / VTA_BLOCK_IN;
   int wgt_size = in_channels / VTA_BLOCK_IN * out_channels / VTA_BLOCK_OUT;
   int out_size = batch / VTA_BATCH * out_channels / VTA_BLOCK_OUT;
   // Make sure we don't exceed buffer bounds
@@ -1251,7 +1263,7 @@ int boolean_test(int batch, int in_channels, int out_channels) {
     for (int j = 0; j < out_channels; j++) {
       acc_T sum = biases[i][j];
       for (int k = 0; k < in_channels; k++) {
-        sum += (acc_T) (inputs[i][k] & weights[j][k]);
+        sum += (acc_T) (inputs[i][k] * weights[j][k]);
         /*printf("DEBUG - %d, %d, %d, elem= %d, weight=%d, temp=%d: \n",i,j,k, 
                 static_cast<uint>(inputs[i][k]), 
                 static_cast<uint>(weights[j][k]), 

@@ -14,11 +14,11 @@ extern "C" {
 #include <stdint.h>
 
 /*! log2 of input type width */
-#define VTA_LOG_INP_WIDTH 0
+#define VTA_LOG_INP_WIDTH 2
 /*! log2 of weight type width */
 #define VTA_LOG_WGT_WIDTH 0
 /*! log2 of accum type width */
-#define VTA_LOG_ACC_WIDTH 3
+#define VTA_LOG_ACC_WIDTH 4
 /*! log2 of batch tensorization size (A in (A,B)x(B,C) mat mul) */
 #define VTA_LOG_BATCH 0
 /*! log2 of inner block tensorization size (B in (A,B)x(B,C) mat mul) */
@@ -34,7 +34,7 @@ extern "C" {
 /*! log2 of on-chip accum buffer size in B */
 #define VTA_LOG_ACC_BUFF_SIZE 14 //17
 /*! log2 of max shift after boolean operation */
-#define VTA_LOG_SFT_LEN 3
+#define VTA_LOG_SFT_LEN 2
 /*! log2 of instruction data type width */
 #define VTA_LOG_INS_WIDTH 6
 /*! Instruction data type width */
@@ -208,7 +208,7 @@ typedef struct {
   /*! \brief Weight index (indexes weight buffer) */
   uint32_t wgt_idx    : VTA_LOG_WGT_BUFF_DEPTH;
   /*! \brief Shift value */
-  //uint32_t sft_val    : VTA_LOG_SFT_LEN;
+  uint32_t sft_val    : VTA_LOG_SFT_LEN;
 } VTABGemUop;
 
 

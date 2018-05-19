@@ -18,7 +18,7 @@ int main(void) {
 #endif
 
     // Run load/store test
-    int status = mem_test(128, 128);
+    int status = mem_test(64, 64);
     // Run reset test
     //status |= reset_test(128, 128);
     // Run fully connected layer test
@@ -29,6 +29,6 @@ int main(void) {
     //status |= conv2d_test(1, 9, 9, 3, 3, 32, 64);
 
     // Run boolean layer test
-    status |= boolean_test(64, 128, 128);
+    status |= boolean_test(32, 64, 64);
     return status;
 }
