@@ -12,19 +12,18 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-
 /*! log2 of input type width */
 #define VTA_LOG_INP_WIDTH 2
 /*! log2 of weight type width */
-#define VTA_LOG_WGT_WIDTH 0
+#define VTA_LOG_WGT_WIDTH 1
 /*! log2 of accum type width */
 #define VTA_LOG_ACC_WIDTH 4
 /*! log2 of batch tensorization size (A in (A,B)x(B,C) mat mul) */
 #define VTA_LOG_BATCH 0
 /*! log2 of inner block tensorization size (B in (A,B)x(B,C) mat mul) */
-#define VTA_LOG_BLOCK_IN 4
+#define VTA_LOG_BLOCK_IN 6
 /*! log2 of outer block tensorization size (C in (A,B)x(B,C) mat mul) */
-#define VTA_LOG_BLOCK_OUT 4
+#define VTA_LOG_BLOCK_OUT 6
 /*! log2 of on-chip micro-op buffer size in B */
 #define VTA_LOG_UOP_BUFF_SIZE 14
 /*! log2 of on-chip input buffer size in B */
@@ -34,7 +33,7 @@ extern "C" {
 /*! log2 of on-chip accum buffer size in B */
 #define VTA_LOG_ACC_BUFF_SIZE 14 //17
 /*! log2 of max shift after boolean operation */
-#define VTA_LOG_SFT_LEN 2
+#define VTA_LOG_SFT_LEN 3
 /*! log2 of instruction data type width */
 #define VTA_LOG_INS_WIDTH 6
 /*! Instruction data type width */

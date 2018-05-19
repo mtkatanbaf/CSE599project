@@ -166,13 +166,14 @@ void vta(
               acc_T temp = acc_mem[ac_idx][i].range((j+1) * VTA_ACC_WIDTH - 1, j * VTA_ACC_WIDTH);
               for (int k=0; k < VTA_BLOCK_IN; ++k){
                 //inp_T elem = inp_mem[in_idx][i].range((k+1) * VTA_INP_WIDTH - 1, k * VTA_INP_WIDTH);
-                inp_T elem = inp_mem[in_idx][i].range((k+1) - 1, k);
-                wgt_T weight = wgt_mem[wt_idx][j].range((k+1) * VTA_WGT_WIDTH - 1, k * VTA_WGT_WIDTH);
-                temp += (elem & weight) << st_val;     
+                //inp_T elem = inp_mem[in_idx][i].range((k+1) - 1, k);
+                //wgt_T weight = wgt_mem[wt_idx][j].range((k+1) - 1, k);
+                //temp += (elem & weight) << st_val;
+                temp += (inp_mem[in_idx][i].range((k+1) - 1, k) & wgt_mem[wt_idx][j].range((k+1) - 1, k)) << st_val;     
                 //temp = temp + ((inp_T)inp_mem[in_idx][i].range((k+1) * VTA_INP_WIDTH - 1, k * VTA_INP_WIDTH)) * ((wgt_T)wgt_mem[wt_idx][j].range((k+1) * VTA_WGT_WIDTH - 1, k * VTA_WGT_WIDTH));
                 /*printf("DEBUG - %d, %d, %d, elem= %d, weight=%d, temp=%d: \n",i,j,k, 
-                static_cast<uint>(elem), 
-                static_cast<uint>(weight), 
+                static_cast<uint>(inp_mem[in_idx][i].range((k+1) - 1, k)), 
+                static_cast<uint>(wgt_mem[wt_idx][j].range((k+1) - 1, k)), 
                 static_cast<uint>(temp));*/
               }
               acc_mem[ac_idx][i].range((j+1) * VTA_ACC_WIDTH - 1, j * VTA_ACC_WIDTH) = temp;

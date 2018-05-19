@@ -467,7 +467,7 @@ VTAGenericUop * getBGEMMUops(int batch, int in_feat, int out_feat) {
   // Converter
   union VTAUop converter;
   // Derive the total uop size
-  int uop_size = batch * in_feat * out_feat * VTA_INP_WIDTH;
+  int uop_size = batch * in_feat * out_feat * VTA_INP_WIDTH * VTA_WGT_WIDTH;
   // Allocate buffer
 #ifdef NO_SIM
   VTAGenericUop *uop_buf = static_cast<VTAGenericUop *>(cma_alloc(sizeof(VTAGenericUop) * uop_size, CACHED));
@@ -480,20 +480,22 @@ VTAGenericUop * getBGEMMUops(int batch, int in_feat, int out_feat) {
                 static_cast<uint>(out_feat));*/
   // Generate micro ops
   int uop_idx = 0;
-  for (int h = 0; h < VTA_INP_WIDTH; h++){
-    for (int i = 0; i < batch; i++) {
-      for (int j = 0; j < in_feat; j++) {
-        for (int k = 0; k < out_feat; k++) {
-          //for (int i = 0; i < batch; i++) {
-          converter.bgemm.dst_idx = i * out_feat + k;
-          converter.bgemm.src_idx = ((h * batch + i) * in_feat + j);
-          converter.bgemm.wgt_idx = k * in_feat + j;
-          converter.bgemm.sft_val = h;
-          uop_buf[uop_idx++] = converter.generic;
-          /*printf("DEBUG - in_idx= %d, wt_idx=%d, ac_idx=%d: \n",
-                  static_cast<uint>(converter.gemm.src_idx), 
-                  static_cast<uint>(converter.gemm.wgt_idx), 
-                  static_cast<uint>(converter.gemm.dst_idx));*/
+  for (int g = 0; g < VTA_WGT_WIDTH; g++){
+    for (int h = 0; h < VTA_INP_WIDTH; h++){
+      for (int i = 0; i < batch; i++) {
+        for (int j = 0; j < in_feat; j++) {
+          for (int k = 0; k < out_feat; k++) {
+            //for (int i = 0; i < batch; i++) {
+            converter.bgemm.dst_idx = i * out_feat + k;
+            converter.bgemm.src_idx = (h * batch + i) * in_feat + j;
+            converter.bgemm.wgt_idx = (g * out_feat + k) * in_feat + j;
+            converter.bgemm.sft_val = g + h;
+            uop_buf[uop_idx++] = converter.generic;
+            printf("DEBUG - in_idx= %d, wt_idx=%d, ac_idx=%d: \n", g, k, j);
+                    /*static_cast<uint>(converter.gemm.src_idx), 
+                    static_cast<uint>(converter.gemm.wgt_idx), 
+                    static_cast<uint>(converter.gemm.dst_idx));*/
+          }
         }
       }
     }
@@ -1207,9 +1209,9 @@ int boolean_test(int batch, int in_channels, int out_channels) {
 
   // Derive number of elements that need to be loaded/stored
   int ins_size = 6;
-  int uop_size = VTA_INP_WIDTH * batch / VTA_BATCH * in_channels / VTA_BLOCK_IN * out_channels / VTA_BLOCK_OUT;
+  int uop_size = VTA_INP_WIDTH * VTA_WGT_WIDTH * batch / VTA_BATCH * in_channels / VTA_BLOCK_IN * out_channels / VTA_BLOCK_OUT;
   int inp_size = VTA_INP_WIDTH * batch / VTA_BATCH * in_channels / VTA_BLOCK_IN;
-  int wgt_size = in_channels / VTA_BLOCK_IN * out_channels / VTA_BLOCK_OUT;
+  int wgt_size = VTA_WGT_WIDTH * in_channels / VTA_BLOCK_IN * out_channels / VTA_BLOCK_OUT;
   int out_size = batch / VTA_BATCH * out_channels / VTA_BLOCK_OUT;
   // Make sure we don't exceed buffer bounds
 //#if VTA_DEBUG == 1

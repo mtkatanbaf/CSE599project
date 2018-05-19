@@ -36,7 +36,8 @@ typedef ap_int<VTA_WGT_WIDTH+VTA_INP_WIDTH+VTA_LOG_BLOCK_IN+1> sum_T;
 typedef ap_uint<1*VTA_BLOCK_IN> inp_vec_T;
 
 /* \typedef wgt_vec_T Weight vector datatype*/
-typedef ap_uint<VTA_WGT_WIDTH*VTA_BLOCK_IN> wgt_vec_T;
+//typedef ap_uint<VTA_WGT_WIDTH*VTA_BLOCK_IN> wgt_vec_T;
+typedef ap_uint<1*VTA_BLOCK_IN> wgt_vec_T;
 
 /* \typedef acc_vec_T Accumulator vector datatype*/
 typedef ap_uint<VTA_ACC_WIDTH*VTA_BLOCK_OUT> acc_vec_T;
